@@ -1,0 +1,241 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Nexus - Connecting Creativity to Innovation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #CCCCCC;
+            color: #333333;
+        }
+        header {
+            background-color: #003366;
+            color: #FFFFFF;
+            padding: 2rem;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        header p {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+        nav {
+            background-color: #FF6600;
+            padding: 1rem;
+            text-align: center;
+        }
+        nav a {
+            color: #FFFFFF;
+            text-decoration: none;
+            margin: 0 1rem;
+            font-weight: bold;
+        }
+        nav a:hover {
+            color: #00CFFF;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+        #lens-craft {
+            background-color: #F5F5DC;
+            color: #0B0B0B;
+        }
+        #lens-craft h2 {
+            color: #DC143C;
+        }
+        #blueprint {
+            background-color: #FFFDD0;
+            color: #2F4F4F;
+        }
+        #blueprint h2 {
+            color: #FFA500;
+        }
+        #london-unfolded {
+            background-color: #FFFFF0;
+            color: #708090;
+        }
+        #london-unfolded h2 {
+            color: #FF4500;
+        }
+        #digital-dynamo {
+            background-color: #BEBEBE;
+            color: #333333;
+        }
+        #digital-dynamo h2 {
+            color: #39FF14;
+        }
+        #mind-heaven {
+            background-color: #D3D3D3;
+            color: #333333;
+        }
+        #mind-heaven h2 {
+            color: #FFDAB9;
+        }
+        .section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .section p, .section ul {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        .section ul {
+            list-style-type: disc;
+            padding-left: 2rem;
+        }
+        footer {
+            background-color: #003366;
+            color: #FFFFFF;
+            text-align: center;
+            padding: 1rem;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+            nav a {
+                display: block;
+                margin: 0.5rem 0;
+            }
+            .section {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Creative Nexus</h1>
+        <p>Connecting Creativity to Innovation</p>
+    </header>
+    <nav>
+        <a href="#lens-craft">Lens Craft Studios</a>
+        <a href="#blueprint">Blueprint Innovators</a>
+        <a href="#london-unfolded">London Unfolded</a>
+        <a href="#digital-dynamo">Digital Dynamo</a>
+        <a href="#mind-heaven">Mind Heaven</a>
+    </nav>
+    <div class="container">
+        <div id="lens-craft" class="section">
+            <h2>Lens Craft Studios</h2>
+            <p><strong>Capturing Moments, Crafting Stories</strong></p>
+            <p>Lens Craft Studios specializes in high-quality photography and videography services, creating visually stunning content for personal milestones and corporate branding.</p>
+            <ul>
+                <li>Professional Portrait Photography</li>
+                <li>Event Coverage (Weddings, Corporate Events, Festivals)</li>
+                <li>Commercial Photography (Products, Real Estate, Food)</li>
+                <li>Creative Videography and Cinematic Storytelling</li>
+                <li>Editing and Post-Production</li>
+            </ul>
+        </div>
+        <div id="blueprint" class="section">
+            <h2>Blueprint Innovators</h2>
+            <p><strong>Designing Dreams, Building Futures</strong></p>
+            <p>Blueprint Innovators transforms visions into reality with innovative, sustainable, and aesthetically pleasing architectural designs for residential and commercial spaces.</p>
+            <ul>
+                <li>Architectural Planning and Design</li>
+                <li>Interior Design Consultation</li>
+                <li>Landscape Architecture</li>
+                <li>Urban Planning and Sustainable Design Solutions</li>
+                <li>3D Modelling and Rendering</li>
+            </ul>
+        </div>
+        <div id="london-unfolded" class="section">
+            <h2>London Unfolded</h2>
+            <p><strong>Telling Stories, One Frame at a Time</strong></p>
+            <p>London Unfolded is a YouTube channel showcasing the vibrant stories, culture, and history of London, blending entertainment with education.</p>
+            <ul>
+                <li>Travel and Tourism in London</li>
+                <li>Cultural Spotlights and Local Events</li>
+                <li>Food and Lifestyle Reviews</li>
+                <li>Urban Exploration and History</li>
+                <li>Interviews with Local Influencers and Artists</li>
+            </ul>
+        </div>
+        <div id="digital-dynamo" class="section">
+            <h2>Digital Dynamo</h2>
+            <p><strong>Powering Brands in the Digital Age</strong></p>
+            <p>Digital Dynamo empowers businesses with cutting-edge digital marketing strategies, from social media management to SEO optimization.</p>
+            <ul>
+                <li>Social Media Marketing and Management</li>
+                <li>Search Engine Optimization (SEO)</li>
+                <li>Pay-Per-Click (PPC) Campaigns</li>
+                <li>Content Creation and Strategy</li>
+                <li>Web Design and Development</li>
+                <li>Analytics and Performance Tracking</li>
+            </ul>
+        </div>
+        <div id="mind-heaven" class="section">
+            <h2>Mind Heaven</h2>
+            <p><strong>Healing Minds, Inspiring Lives</strong></p>
+            <p>Mind Heaven is an NGO dedicated to mental health, offering counseling, support groups, and educational programs to promote well-being.</p>
+            <ul>
+                <li>Free and Affordable Counseling Sessions</li>
+                <li>Support Groups for Anxiety, Depression, and Loneliness</li>
+                <li>Educational Workshops and Seminars on Mental Wellness</li>
+                <li>Online Resources (Blogs, Videos, and Self-Help Guides)</li>
+                <li>Crisis Intervention Services</li>
+            </ul>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2025 Creative Nexus. All rights reserved.</p>
+    </footer>
+</body>
+</html>
